@@ -6,10 +6,9 @@
 <p>
 
 <p align="center">
-        💜 <a href="https://chat.qwenlm.ai/"><b>Qwen Chat</b></a>&nbsp&nbsp | &nbsp&nbsp🤗 <a href="https://huggingface.co/collections/Qwen/qwen25-vl-6795ffac22b334a837c0f9a5">Hugging Face</a>&nbsp&nbsp | &nbsp&nbsp🤖 <a href="https://modelscope.cn/organization/qwen">ModelScope</a>&nbsp&nbsp | &nbsp&nbsp📑 <a href="https://qwenlm.github.io/blog/qwen2.5-vl/">Blog</a>&nbsp&nbsp | &nbsp&nbsp📚 <a href="https://github.com/QwenLM/Qwen2.5-VL/tree/main/cookbooks">Cookbooks</a>&nbsp&nbsp | &nbsp&nbsp📑 Paper (is
-          coming)
+        💜 <a href="https://chat.qwenlm.ai/"><b>Qwen Chat</b></a>&nbsp&nbsp | &nbsp&nbsp🤗 <a href="https://huggingface.co/collections/Qwen/qwen25-vl-6795ffac22b334a837c0f9a5">Hugging Face</a>&nbsp&nbsp | &nbsp&nbsp🤖 <a href="https://modelscope.cn/organization/qwen">ModelScope</a>&nbsp&nbsp | &nbsp&nbsp📑 <a href="https://qwenlm.github.io/blog/qwen2.5-vl/">Blog</a>&nbsp&nbsp | &nbsp&nbsp📚 <a href="https://github.com/QwenLM/Qwen2.5-VL/tree/main/cookbooks">Cookbooks</a>&nbsp&nbsp | &nbsp&nbsp📑 <a href="https://arxiv.org/abs/2502.13923">Paper</a>&nbsp&nbsp
 <br>
-🖥️ <a href="https://huggingface.co/spaces/Qwen/Qwen2.5-VL">Demo</a>&nbsp&nbsp | &nbsp&nbsp💬 <a href="https://github.com/QwenLM/Qwen/blob/main/assets/wechat.png">WeChat (微信)</a>&nbsp&nbsp | &nbsp&nbsp🫨 <a href="https://discord.gg/CV4E9rpNSD">Discord</a>&nbsp&nbsp | &nbsp&nbsp📑 <a href="https://help.aliyun.com/zh/model-studio/developer-reference/qwen-vl-api">API</a>&nbsp&nbsp | &nbsp&nbsp🖥️ <a href="https://gallery.pai-ml.com/#/preview/deepLearning/cv/qwen2.5-vl">PAI-DSW</a>
+🖥️ <a href="https://huggingface.co/spaces/Qwen/Qwen2.5-VL-72B-Instruct">Demo</a>&nbsp&nbsp | &nbsp&nbsp💬 <a href="https://github.com/QwenLM/Qwen/blob/main/assets/wechat.png">WeChat (微信)</a>&nbsp&nbsp | &nbsp&nbsp🫨 <a href="https://discord.gg/CV4E9rpNSD">Discord</a>&nbsp&nbsp | &nbsp&nbsp📑 <a href="https://help.aliyun.com/zh/model-studio/developer-reference/qwen-vl-api">API</a>&nbsp&nbsp | &nbsp&nbsp🖥️ <a href="https://gallery.pai-ml.com/#/preview/deepLearning/cv/qwen2.5-vl">PAI-DSW</a>
 </p>
 
 
@@ -47,6 +46,7 @@ We enhance both training and inference speeds by strategically implementing wind
 
 
 ## News
+* 2025.02.20: we have released the [Qwen2.5-VL Technical Report](https://arxiv.org/abs/2502.13923). Alongside the report, we have also released AWQ-quantized models for Qwen2.5-VL in three different sizes: [3B](https://huggingface.co/Qwen/Qwen2.5-VL-3B-Instruct-AWQ), [7B](https://huggingface.co/Qwen/Qwen2.5-VL-7B-Instruct-AWQ) , and [72B](https://huggingface.co/Qwen/Qwen2.5-VL-72B-Instruct-AWQ) parameters.
 * 2025.01.28: We have released the [Qwen2.5-VL series](https://huggingface.co/Qwen). For more details, please check our [blog](https://qwenlm.github.io/blog/qwen2.5-vl/)!
 * 2024.12.25: We have released the [QvQ-72B-Preview](https://huggingface.co/Qwen/QVQ-72B-Preview). QvQ-72B-Preview is an experimental research model, focusing on enhancing visual reasoning capabilities. For more details, please check our [blog](https://qwenlm.github.io/blog/qvq-72b-preview/)!
 * 2024.09.19: The instruction-tuned [Qwen2-VL-72B model](https://huggingface.co/Qwen/Qwen2-VL-72B-Instruct) and its quantized version [[AWQ](https://huggingface.co/Qwen/Qwen2-VL-72B-Instruct-AWQ), [GPTQ-Int4](https://huggingface.co/Qwen/Qwen2-VL-72B-Instruct-GPTQ-Int4), [GPTQ-Int8](https://huggingface.co/Qwen/Qwen2-VL-72B-Instruct-GPTQ-Int8)] are now available. We have also released the [Qwen2-VL paper](https://arxiv.org/pdf/2409.12191) simultaneously.
@@ -190,6 +190,21 @@ output_text = processor.batch_decode(
 )
 print(output_text)
 ```
+
+<details>
+<summary>Minimum video memory requirements</summary>
+
+| Precision | Qwen2.5-VL-3B | Qwen2.5-VL-7B | Qwen2.5-VL-72B |
+|-----------| ------------- | --------- | -------------- |
+| FP32      | 5.75 GB       | 13.17 GB  | 133.11 GB      |
+| BF16      | 2.87 GB       | 6.59 GB   | 66.55 GB       |
+| INT8      | 1.44 GB       | 3.29 GB   | 33.28 GB       |
+| INT4      | 735.75 MB     | 1.65 GB   | 16.64 GB       |
+
+Note: The table above presents the theoretical minimum memory requirements for inference with `transformers`; however, in practice, the actual memory usage is typically at least 1.2 times higher. For more information, see the linked resource [here](https://huggingface.co/docs/accelerate/main/en/usage_guides/model_size_estimator).
+</details>
+
+
 <details>
 <summary>Multi image inference</summary>
 
@@ -658,7 +673,7 @@ This demo supports webcam/screen capture as its video input source. To support s
 
 ## Deployment
 
-We recommend using vLLM for fast Qwen2.5-VL deployment and inference. You need to install `vllm>=0.7.2` to enable Qwen2.5-VL support. You can also use our [official docker image](#-docker).
+We recommend using vLLM for fast Qwen2.5-VL deployment and inference. You need to install `vllm>0.7.2` to enable Qwen2.5-VL support. You can also use our [official docker image](#-docker).
 
 You can also check [vLLM official documentation](https://docs.vllm.ai/en/latest/serving/multimodal_inputs.html) for more details about online serving and offline inference.
 
@@ -667,7 +682,7 @@ You can also check [vLLM official documentation](https://docs.vllm.ai/en/latest/
 pip install git+https://github.com/huggingface/transformers@f3f6c86582611976e72be054675e2bf0abb5f775
 pip install accelerate
 pip install qwen-vl-utils
-pip install 'vllm>=0.7.2'
+pip install 'vllm>0.7.2'
 
 ```
 ### Start an OpenAI API Service
@@ -684,7 +699,7 @@ Then you can use the chat API as below (via curl or Python API):
 curl http://localhost:8000/v1/chat/completions \
     -H "Content-Type: application/json" \
     -d '{
-    "model": "Qwen2.5-VL-7B-Instruct",
+    "model": "Qwen/Qwen2.5-VL-7B-Instruct",
     "messages": [
     {"role": "system", "content": "You are a helpful assistant."},
     {"role": "user", "content": [
@@ -708,7 +723,7 @@ client = OpenAI(
 )
 
 chat_response = client.chat.completions.create(
-    model="Qwen2.5-VL-7B-Instruct",
+    model="Qwen/Qwen2.5-VL-7B-Instruct",
     messages=[
         {"role": "system", "content": "You are a helpful assistant."},
         {
@@ -745,7 +760,7 @@ with open(image_path, "rb") as f:
 encoded_image_text = encoded_image.decode("utf-8")
 base64_qwen = f"data:image;base64,{encoded_image_text}"
 chat_response = client.chat.completions.create(
-    model="Qwen2.5-VL-7B-Instruct",
+    model="Qwen/Qwen2.5-VL-7B-Instruct",
     messages=[
         {"role": "system", "content": "You are a helpful assistant."},
         {
@@ -761,6 +776,93 @@ chat_response = client.chat.completions.create(
             ],
         },
     ],
+)
+print("Chat response:", chat_response)
+```
+
+For videos, you can use the chat API  as follows：
+```python
+import base64
+import numpy as np
+from PIL import Image
+from io import BytesIO
+from openai import OpenAI
+from qwen_vl_utils import process_vision_info
+
+
+# Set OpenAI's API key and API base to use vLLM's API server.
+openai_api_key = "EMPTY"
+openai_api_base = "http://localhost:8000/v1"
+
+client = OpenAI(
+    api_key=openai_api_key,
+    base_url=openai_api_base,
+)
+
+
+video_messages = [
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": [
+        {"type": "text", "text": "请用表格总结一下视频中的商品特点"},
+        {
+            "type": "video",
+            "video": "https://duguang-labelling.oss-cn-shanghai.aliyuncs.com/qiansun/video_ocr/videos/50221078283.mp4",
+            "total_pixels": 20480 * 28 * 28, "min_pixels": 16 * 28 * 2, 
+            'fps': 3.0  # The default value is 2.0, but for demonstration purposes, we set it to 3.0.
+        }]
+    },
+]
+
+
+def prepare_message_for_vllm(content_messages):
+    """
+    The frame extraction logic for videos in `vLLM` differs from that of `qwen_vl_utils`.
+    Here, we utilize `qwen_vl_utils` to extract video frames, with the `media_typ`e of the video explicitly set to `video/jpeg`.
+    By doing so, vLLM will no longer attempt to extract frames from the input base64-encoded images.
+    """
+    vllm_messages, fps_list = [], []
+    for message in content_messages:
+        message_content_list = message["content"]
+        if not isinstance(message_content_list, list):
+            vllm_messages.append(message)
+            continue
+
+        new_content_list = []
+        for part_message in message_content_list:
+            if 'video' in part_message:
+                video_message = [{'content': [part_message]}]
+                image_inputs, video_inputs, video_kwargs = process_vision_info(video_message, return_video_kwargs=True)
+                assert video_inputs is not None, "video_inputs should not be None"
+                video_input = (video_inputs.pop()).permute(0, 2, 3, 1).numpy().astype(np.uint8)
+                fps_list.extend(video_kwargs.get('fps', []))
+
+                # encode image with base64
+                base64_frames = []
+                for frame in video_input:
+                    img = Image.fromarray(frame)
+                    output_buffer = BytesIO()
+                    img.save(output_buffer, format="jpeg")
+                    byte_data = output_buffer.getvalue()
+                    base64_str = base64.b64encode(byte_data).decode("utf-8")
+                    base64_frames.append(base64_str)
+
+                part_message = {
+                    "type": "video_url",
+                    "video_url": {"url": f"data:video/jpeg;base64,{','.join(base64_frames)}"}
+                }
+            new_content_list.append(part_message)
+        message["content"] = new_content_list
+        vllm_messages.append(message)
+    return vllm_messages, {'fps': fps_list}
+
+
+video_messages, video_kwargs = prepare_message_for_vllm(video_messages)
+chat_response = client.chat.completions.create(
+    model="Qwen/Qwen2.5-VL-7B-Instruct",
+    messages=video_messages,
+    extra_body={
+        "mm_processor_kwargs": video_kwargs
+    }
 )
 print("Chat response:", chat_response)
 ```
@@ -789,7 +891,7 @@ sampling_params = SamplingParams(
     stop_token_ids=[],
 )
 
-messages = [
+image_messages = [
     {"role": "system", "content": "You are a helpful assistant."},
     {
         "role": "user",
@@ -804,9 +906,26 @@ messages = [
         ],
     },
 ]
+
+
 # For video input, you can pass following values instead:
 # "type": "video",
 # "video": "<video URL>",
+video_messages = [
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": [
+            {"type": "text", "text": "请用表格总结一下视频中的商品特点"},
+            {
+                "type": "video", 
+                "video": "https://duguang-labelling.oss-cn-shanghai.aliyuncs.com/qiansun/video_ocr/videos/50221078283.mp4",
+                "total_pixels": 20480 * 28 * 28, "min_pixels": 16 * 28 * 28
+            }
+        ]
+    },
+]
+
+# Here we use video messages as a demonstration
+messages = video_messages
 
 processor = AutoProcessor.from_pretrained(MODEL_PATH)
 prompt = processor.apply_chat_template(
@@ -854,14 +973,12 @@ If you find our paper and code useful in your research, please consider giving a
 
 ```BibTeX
 
-@misc{Qwen2.5-VL,
-    title = {Qwen2.5-VL},
-    url = {https://qwenlm.github.io/blog/qwen2.5-vl/},
-    author = {Qwen Team},
-    month = {January},
-    year = {2025}
+@article{Qwen2.5-VL,
+  title={Qwen2.5-VL Technical Report},
+  author={Bai, Shuai and Chen, Keqin and Liu, Xuejing and Wang, Jialin and Ge, Wenbin and Song, Sibo and Dang, Kai and Wang, Peng and Wang, Shijie and Tang, Jun and Zhong, Humen and Zhu, Yuanzhi and Yang, Mingkun and Li, Zhaohai and Wan, Jianqiang and Wang, Pengfei and Ding, Wei and Fu, Zheren and Xu, Yiheng and Ye, Jiabo and Zhang, Xi and Xie, Tianbao and Cheng, Zesen and Zhang, Hang and Yang, Zhibo and Xu, Haiyang and Lin, Junyang},
+  journal={arXiv preprint arXiv:2502.13923},
+  year={2025}
 }
-
 
 @article{Qwen2-VL,
   title={Qwen2-VL: Enhancing Vision-Language Model's Perception of the World at Any Resolution},
